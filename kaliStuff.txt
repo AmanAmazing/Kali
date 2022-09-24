@@ -6,5 +6,19 @@
 
 #basic commands 
 'ls'    | lists current items in directory 
-'ls -a' | hidden program files   
+'ls -a' | hidden program files 
+'ls -l' | more info  
 'cd'    | change directory 
+'cd ..' | moves up one directory. 
+'cd /'  | moves to the root directory
+'pwd'   | present working directory
+'whoami'| current user
+'app -h'| gets help. also try '--help' '-?'
+'man appname'| brings the manual for the app. 'q' to quit
+
+
+#finding shit 
+'locate fileAppName' | can be unreliable if system db hasn't been updated
+'whereis aircrack-ng'| finds the binaries 
+'which aircrack-ng'  | finds binaries in PATH variable 
+
