@@ -1,1 +1,14 @@
+"ifconfig" | active network interfaces on the system
+"iwconfig" | wireless adaptor information
 
+#changing your IP Address 
+"ifconfig eth0 192.168.0.70" | used to spoof IP addresses 
+#you can also add "netmask address  broadcast address" 
+# after ifconfig to change those parameters
+
+
+#changing your MAC address (or HWaddr).
+#useful to bypass network access controls
+"ifconfig eth0 down"
+"ifconfig eth0 hw ether 00:11:22:33:44:55"
+"ifconfig eth0 up"
