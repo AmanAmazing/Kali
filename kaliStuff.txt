@@ -1,0 +1,10 @@
+#terminal 
+'ctrl + alt + t'   |opens terminal window
+'ctrl + shift + w' | closes terminal window/tab
+'ctrl + shift + t' | creates new terminal tab  
+
+
+#basic commands 
+'ls'    | lists current items in directory 
+'ls -a' | hidden program files   
+'cd'    | change directory 
