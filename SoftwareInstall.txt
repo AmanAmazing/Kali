@@ -1,0 +1,50 @@
+#Using apt (Advanced Packaging Tool) to handle software 
+#main tool is 'apt-get'
+
+'apt-cache search packagename' | checks if software is already installed 
+'apt-get install packagename'  | installs the package
+
+----------------------------------------------------------------------------
+#Deleting software
+'apt-get remove packagename'   | deletes the software
+#if you want to remove the configuration files aswell
+'apt-get purge packagename' | removes configuration files aswell 
+
+-----------------------------------------------------------------------------
+#updating software
+'apt-get update' | checks if updates are available 
+'apt-get upgrade'| updates those packages
+
+-----------------------------------------------------------------------------
+#Adding Repositories to your sources.list file 
+
+The servers that hold the software for particular distributions of Linux
+are known as repositories. Nearly every distribution has its own
+repositories of software—developed and configured for that distribution
+—that might not work well, or at all, with other distributions. Although
+these repositories often contain the same or similar software, they aren’t
+identical, and they sometimes have different versions of the same
+software or entirely different software.
+You will, of course, be using the Kali repository, which has a large
+amount of security and hacking software. But because Kali specializes in
+security and hacking, it doesn’t include some specialty software and
+tools and even some run-of-the-mill software. It’s worth adding a
+backup repository or two that your system can search through in case it
+doesn’t find it a specific software in the Kali repository.
+The repositories your system will search for software are stored in
+the sources.list file, and you can alter this file to define from which
+repositories you want to download software. I often add the Ubuntu
+repositories after the Kali repositories in my sources.list file; that way,
+when I request to download a new software package, my system will
+first look in the Kali repository, and if the software package isn’t there, it
+will look in the Ubuntu repository.
+You can find the sources.list file at /etc/apt/sources.list and open it with
+any text editor. 
+
+-------------------------------------------------------------------------------------------
+#GUI based install options
+'apt-get install snaptic' | gui based installer
+'apt-get install gdebi'   | gui based installer 
+--------------------------------------------------------------------------------------------
+#Git to install software
+'git clone https://www.github.com/whatever' | installs from github
