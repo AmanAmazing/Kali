@@ -17,8 +17,37 @@
 'man appname'| brings the manual for the app. 'q' to quit
 
 
+---------------------------------------------------------------------------------------------------
+# Creating Files 
+'cat > newfilename' | Creates a file and enters interactive mode. 'ctrl + d' to exit
+'cat newfilename'   | Displays the contents of that file 
+'cat >> newfilename'| Appends to the end of the file the contents. 
+'cat > oldfilename '| Overwrites an older file. 
+'touch filename'    | Creates a new file
+'cp filename /folder optionalnewnameforfile' | Copies the file into new directory. 
+
+#Creating Directories 
+'mkdir newdirectory'| Makes a new directory (folder)
+'rm filename' | Removes the file
+'rmdir directoryname' | Removes empty directories
+'rm -r directoryname' | Removes non empty directories
+'mv filename newfilename' | Renames the file 
+
+'head -15 filename' | Displays the first 15 lines of the file in your terminal 
+'tail -8 filename'  | Displays the last 8 lines of the files in your terminal
+ use -nl to display numbered lines 
+
+
+
+---------------------------------------------------------------------------------------------------
+
 #finding shit 
 'locate fileAppName' | can be unreliable if system db hasn't been updated
 'whereis aircrack-ng'| finds the binaries 
 'which aircrack-ng'  | finds binaries in PATH variable 
+'cat filename | grep output' | displays all lines containing the word output 
 
+#more powerful search command using 'find' 
+'find directory options expression' | basic syntax for find 
+'find / -type f -name apache2' | starting from the root directory, it searches for a file
+                                 with the name apache2
