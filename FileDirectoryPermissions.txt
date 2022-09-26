@@ -1,0 +1,178 @@
+# The root user can do anything on the system. 
+Everyone else is in different groups. For a company,
+that might include staff working in accounting being in a 
+different group to the telesales staff. 
+
+# Different permissions 
+'r' | Permission to read 
+'w' | Permission to write 
+'x' | Permission to execute. This allows users to execute a file but 
+      not necessarily view it or edit. 
+
+# Changing File Ownership 
+'chown bob /tmp/bobsfile' | This gives 'bob' ownership of the file 
+'chgrp security newIDS'   | This gives the 'security' group ownership of 'newIDS'
+
+# Checking permissions 
+'ls -l directoryName' | Displays the permission associated with files in that directory
+
+display output - '-rw-r--r--'  | first character is '-' so it is a file ('d' if directory).
+The next three represent permissions the user has. The next three represent permissions
+the group has. The last three represent the permissions all users have. A '-' means that 
+specific permission is not granted. for the aforementioned example, the user cannot execute. 
+The group can only read. All users can only read. 
+--------------------------------------------------------------------------------------------------------
+# Changing Permissions with chmod (change mode)
+# There are two methods 
+# Method 1 - decimal notation 
+'r' = 4, 'w' = 2, 'x' = 1. So adding them up gives you a number 
+so if you want to give only write permissions it would be 4. 
+if you want to give write and execute it would be 2+1 = 3. 
+so for the 3 permission groups (user, group,allusers) it would be something like this
+'chmod 774 filename' | user can read,write,execute. group can also do those. all users can only read. 
+You can use 'ls -l filename' to check whether those permissions have changed 
+
+#Method 2 
+The symbolic method is often referred to as the
+UGO syntax, which stands for user (or owner), group, and others.
+UGO syntax is very simple. Enter the chmod command and then the
+users you want to change permissions for, providing u for user, g for
+group, or o for others, followed by one of three operators:
+- Removes a permission
++ Adds a permission
+= Sets a permission
+After the operator, include the permission you want to add or
+remove (rwx) and, finally, the name of the file to apply it to.
+So, if you want to remove the write permission from the user that
+the file hashcat.hcstat belongs to, you could enter the following:
+'chmod u-w filename' | Removes the users write permission from that file 
+------------------------------------------------------------------------------------------------------------
+# Giving Root execute permission on a new tool 
+since default permissions for files is 666 (write and read) and for directories 777(read write execute),
+to get rid of the "Permission denied" warning we need to do the following. 
+'chmod 766 filename' | Gives the User read write and execute permission. 
+
+------------------------------------------------------------------------------------------------------------
+# Setting default permissions with umask (unmask).
+umask is a 3 digit number which is subtracted from the permissions number. 
+example below 
+
+ New Files   New Directories
+ 6 6 6       7 7 7           Linux base permissions 
+-0 2 2      -0 2 2           umask
+ 6 4 4       7 5 5           Resulting permissions 
+
+so the umask above is set to '022' 
+In Kali, as with most Debian systems the umask is preconfigured to 022. 
+which means the resulting permissions in the above example are the default for kali. 
+Each user can set the default permissions for their created files by changing their 
+personal '.profile' file. This can be found in '/home/usrname/.profile'. 
+'umask' | returns the current umask setting. 
+
+------------------------------------------------------------------------------------------------------------
+later on I will need to learn about SUID and SGID permissions. These are special permissions. 
+Special Permissions
+In addition to the three general-purpose permissions, rwx, Linux has
+three special permissions that are slightly more complicated. These
+special permissions are set user ID (or SUID), set group ID (or SGID), and
+sticky bit. I’ll discuss each in turn in the next three sections.
+Granting Temporary Root Permissions with SUID
+As you should know by now, a user can execute a file only if they have
+permission to execute that particular file. If the user only has read
+and/or write permissions, they cannot execute. This may seem
+straightforward, but there are exceptions to this rule.
+You may have encountered a case in which a file requires the
+permissions of the root user during execution for all users, even those
+who are not root. For example, a file that allows users to change their
+password would need access to the /etc/shadow file—the file that holds
+the users’ passwords in Linux—which requires root user privileges in
+order to execute. In such a case, you can temporarily grant the owner’s
+privileges to execute the file by setting the SUID bit on the program.
+Basically, the SUID bit says that any user can execute the file with the
+permissions of the owner but those permissions don’t extend beyond the
+use of that file.
+To set the SUID bit, enter a 4 before the regular permissions, so a file
+with a new resulting permission of 644 is represented as 4644 when the
+SUID bit is set.
+Setting the SUID on a file is not something a typical user would do, but
+if you want to do so, you’ll use the chmod command, as in chmod 4644
+filename.
+Granting the Root User’s Group Permissions SGID
+SGID also grants temporary elevated permissions, but it grants the
+permissions of the file owner’s group, rather than of the file’s owner.
+This means that, with an SGID bit set, someone without execute
+permission can execute a file if the owner belongs to the group that has
+permission to execute that file.
+The SGID bit works slightly differently when applied to a directory:
+when the bit is set on a directory, ownership of new files created in that
+directory goes to the directory creator’s group, rather than the file
+creator’s group. This is very useful when a directory is shared by
+multiple users. All users in that group can execute the file(s), not just a
+single user.
+The SGID bit is represented as 2 before the regular permissions, so a
+new file with the resulting permissions 644 would be represented as 2644
+when the SGID bit is set. Again, you would use the chmod command for
+this—for example, chmod 2644 filename.
+
+------------------------------------------------------------------------------------------------------------------------
+As a hacker, these special permissions can be used to exploit Linux
+systems through privilege escalation, whereby a regular user gains root or
+sysadmin privileges and the associated permissions. With root
+privileges, you can do anything on the system.
+One way to do this is to exploit the SUID bit. A system administrator
+or software developer might set the SUID bit on a program to allow that
+program access to files with root privileges. For instance, scripts that
+need to change passwords often have the SUID bit set. You, the hacker,
+can use that permission to gain temporary root privileges and do
+something malicious, such as get access to the passwords at /etc/shadow.
+Let’s look for files with the SUID bit set on our Kali system to try this
+out. Back in Chapter 1, I introduced you to the find command. We’ll use
+its power to find files with the SUID bit set.
+As you’ll remember, the find command is powerful, but the syntax is
+bit more complicated than some of the other location commands, such
+as locate and which. Take a moment to review the find syntax in Chapter
+1, if you need to.
+In this case, we want to find files anywhere on the filesystem, for the
+root user or other sysadmin, with the permissions 4000. To do this, we
+can use the following find command:
+kali >find / -user root -perm -4000
+With this command, we ask Kali to start looking at the top of the
+filesystem with the / syntax. It then looks everywhere below / for files
+that are owned by root, specified with user root, and that have the SUID
+permission bit set (-perm -4000).
+When we run this command, we get the output shown in Listing 5-
+2.
+/usr/bin/chsh
+/usr/bin/gpasswd
+/usr/bin/pkexec
+/usr/bin/sudo
+/usr/bin/passwd
+/usr/bin/kismet_capture
+--snip--
+Listing 5-2: Finding files with the SUID bit set
+The output reveals numerous files that have the SUID bit set. Let’s
+navigate to the /usr/bin directory, where many of these files reside, and
+then run a long listing on that directory and scroll down to the sudo file,
+as shown in Listing 5-3.
+kali >cd /usr/bin
+kali >ls -l
+--snip--
+-rwxr-xr-x 1 root root 176272 Jul 18 2018 stunnel4
+-rwxr-xr-x 1 root root 26696 Mar 17 2018 sucrack
+➊ -rwsr-xr-x 1 root root 140944 Jul 5 2018 sudo
+--snip--
+Listing 5-3: Identifying files with the SUID bit set
+Note that at ➊, the first set of permissions—for the owner—has an s
+in place of the x. This is how Linux represents that the SUID bit is set.
+This means that anyone who runs the sudo file has the privileges of the
+root user, which can be a security concern for the sysadmin and a
+potential attack vector for the hacker. For instance, some applications
+need to access the /etc/shadow file to successfully complete their tasks. If
+the attacker can gain control of that application, they can use that
+application’s access to the passwords on a Linux system.
+Linux has a well-developed system of security that protects files and
+directories from unauthorized access. The aspiring hacker needs to have
+a basic understanding of this system not only to protect their files but
+also to execute new tools and files. In some cases, hackers can exploit
+the SUID and SGID permissions to escalate privileges from a regular user to
+a root user.
