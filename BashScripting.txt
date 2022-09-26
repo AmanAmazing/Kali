@@ -1,0 +1,18 @@
+bash scripts have .sh extension
+Final scripts can be found in the BashScripts directory on github 
+ 
+The top of the script has to have a shebang(#!!) which lets the os know which interpreter to use.
+For bash scripting
+'#! /bin/bash' | Bash shell script interpreter 
+'echo "hello world" ' | 'echo' command repeats back to your monitor whatever follows command 
+
+# change the permissions of the file so you can execute it.
+'chmod 755 scriptname' | Gives everyone execute permission
+'./scriptname' | Executes the script. The './' means the script in this directory. 
+
+#Getting a variable 
+'echo "please enter your name?" 
+ read name 
+ echo "Welcome" $name '            | Prints a more personal welcome message 
+
+
